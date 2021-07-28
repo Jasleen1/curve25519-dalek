@@ -147,7 +147,7 @@ use backend::serial::scalar_mul;
     any(target_feature = "avx2", target_feature = "avx512ifma")
 ))]
 use backend::vector::scalar_mul;
-
+use std::io::Write;
 // ------------------------------------------------------------------------
 // Compressed points
 // ------------------------------------------------------------------------
@@ -1153,6 +1153,8 @@ impl Debug for EdwardsPoint {
 
 #[cfg(test)]
 mod test {
+    use std::{fs::File, io::Result};
+
     use field::FieldElement;
     use scalar::Scalar;
     use subtle::ConditionallySelectable;
@@ -1357,7 +1359,7 @@ mod test {
 
     /// Test that all the basepoint table types compute the same results.
     #[test]
-    fn basepoint_tables() {
+    fn basepoint_tables() -> Result<()>{
         let P = &constants::ED25519_BASEPOINT_POINT;
         let a = A_SCALAR;
 
@@ -1379,6 +1381,11 @@ mod test {
         assert_eq!(aP32, aP64);
         assert_eq!(aP64, aP128);
         assert_eq!(aP128, aP256);
+        //println!("{:?}",table_radix32);
+        let path = "radix32-table.txt";
+        let mut output = File::create(path)?;
+        write!(output, "{:?}", table_radix32);
+        Ok(())
     }
 
     // Check a unreduced scalar multiplication by the basepoint tables.
