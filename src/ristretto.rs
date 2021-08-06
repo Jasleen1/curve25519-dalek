@@ -180,6 +180,8 @@ use subtle::ConstantTimeEq;
 
 use edwards::EdwardsBasepointTable;
 use edwards::EdwardsPoint;
+use edwards::EdwardsBasepointTableRadix32;
+use traits::BasepointTable;
 
 #[allow(unused_imports)]
 use prelude::*;
@@ -990,7 +992,7 @@ impl RistrettoPoint {
 /// let P = &a * &constants::RISTRETTO_BASEPOINT_TABLE;
 /// ```
 #[derive(Clone)]
-pub struct RistrettoBasepointTable(pub(crate) EdwardsBasepointTable);
+pub struct RistrettoBasepointTable(pub(crate) EdwardsBasepointTableRadix32);
 
 impl<'a, 'b> Mul<&'b Scalar> for &'a RistrettoBasepointTable {
     type Output = RistrettoPoint;
@@ -1011,7 +1013,7 @@ impl<'a, 'b> Mul<&'a RistrettoBasepointTable> for &'b Scalar {
 impl RistrettoBasepointTable {
     /// Create a precomputed table of multiples of the given `basepoint`.
     pub fn create(basepoint: &RistrettoPoint) -> RistrettoBasepointTable {
-        RistrettoBasepointTable(EdwardsBasepointTable::create(&basepoint.0))
+        RistrettoBasepointTable(EdwardsBasepointTableRadix32::create(&basepoint.0))
     }
 
     /// Get the basepoint for this table as a `RistrettoPoint`.

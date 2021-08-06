@@ -47,6 +47,7 @@
 //!
 //! ```
 //! use curve25519_dalek::scalar::Scalar;
+//! use rand_core::{CryptoRng, RngCore};
 //!
 //! let l_plus_two_bytes: [u8; 32] = [
 //!    0xef, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58,
